@@ -109,28 +109,38 @@
   }
   #no-btn:hover { background: #fff0f7; color: #999; }
 
-  /* ---- EVET EKRANI & CSS ÇİÇEK (KASIMPATI) ---- */
+  /* ---- EVET EKRANI & CSS ÇİÇEK BAHÇESİ ---- */
   #yes-screen {
     display: none;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     height: 100vh;
     animation: fadeIn 1s forwards;
     position: relative;
     z-index: 20;
+    padding-top: 15vh;
   }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  .garden {
-    position: relative;
-    width: 100%;
-    height: 380px;
+  /* 23 Çiçeğin Çıkacağı Bahçe Alanı */
+  #garden {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 60vh;
+    pointer-events: none; /* Tıklamayı engellememesi için */
+  }
+
+  .flower-wrapper {
+    position: absolute;
+    bottom: -20px;
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    margin-bottom: 2rem;
+    transform-origin: bottom center;
   }
 
   /* Çiçeğin Sapı */
@@ -141,7 +151,7 @@
     box-shadow: 0 0 15px var(--techno-cyan), inset 0 0 5px rgba(255,255,255,0.5);
     border-radius: 4px;
     position: relative;
-    animation: growStem 2s ease-in-out forwards 0.5s;
+    animation: growStem 2s ease-in-out forwards;
   }
   @keyframes growStem { to { height: 260px; } }
 
@@ -159,13 +169,13 @@
     bottom: 50px; left: 6px;
     border-radius: 0 100% 0 100%;
     transform-origin: bottom left;
-    animation: growLeafRight 1.5s ease-out forwards 1.2s;
+    animation: growLeafRight 1.5s ease-out forwards;
   }
   .leaf.left {
     bottom: 110px; right: 6px;
     border-radius: 100% 0 100% 0;
     transform-origin: bottom right;
-    animation: growLeafLeft 1.5s ease-out forwards 1.5s;
+    animation: growLeafLeft 1.5s ease-out forwards;
   }
   @keyframes growLeafRight { to { transform: scale(1) rotate(15deg); } }
   @keyframes growLeafLeft { to { transform: scale(1) rotate(-15deg); } }
@@ -185,38 +195,28 @@
     opacity: 0;
   }
 
-  /* Kasımpatı Katmanları (Dıştan İçe Doğru) */
   .layer1 {
-    width: 18px; height: 130px;
-    margin-left: -9px; /* Tam ortalamak için genişliğin yarısı */
+    width: 18px; height: 130px; margin-left: -9px;
     background: linear-gradient(to top, #ff1493, #ffa6d9);
     box-shadow: 0 0 15px #ff1493;
     animation: bloom 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   }
   .layer2 {
-    width: 14px; height: 95px;
-    margin-left: -7px;
+    width: 14px; height: 95px; margin-left: -7px;
     background: linear-gradient(to top, #d6006e, #ff6eba);
     box-shadow: 0 0 12px #d6006e;
     animation: bloom 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   }
   .layer3 {
-    width: 10px; height: 60px;
-    margin-left: -5px;
+    width: 10px; height: 60px; margin-left: -5px;
     background: linear-gradient(to top, #9c27b0, #ff4da6);
     box-shadow: 0 0 10px #ff4da6;
     animation: bloom 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   }
 
   @keyframes bloom {
-    0% {
-      transform: rotate(calc((360deg / var(--total)) * var(--i))) scale(0);
-      opacity: 0;
-    }
-    100% {
-      transform: rotate(calc((360deg / var(--total)) * var(--i))) scale(1) translateY(-5px);
-      opacity: 0.95;
-    }
+    0% { transform: rotate(calc((360deg / var(--total)) * var(--i))) scale(0); opacity: 0; }
+    100% { transform: rotate(calc((360deg / var(--total)) * var(--i))) scale(1) translateY(-5px); opacity: 0.95; }
   }
 
   /* Çiçeğin Sarı/Turuncu Göbeği */
@@ -229,20 +229,20 @@
     border-radius: 50%;
     transform: translate(-50%, -50%) scale(0);
     z-index: 50;
-    animation: popCenter 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 4.5s;
+    animation: popCenter 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   }
   @keyframes popCenter { to { transform: translate(-50%, -50%) scale(1); } }
 
-  /* Yazılar ve Penguen */
+  /* Yazılar ve Penguen (Bahçenin Üstünde) */
   .yes-text {
     font-family: 'Pacifico', cursive;
-    font-size: clamp(1.6rem, 5vw, 2.5rem);
+    font-size: clamp(1.8rem, 6vw, 3rem);
     color: #ff8dcb;
     text-shadow: 0 0 20px rgba(255, 141, 203, 0.8);
-    animation: glow 2s ease-in-out infinite alternate;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     opacity: 0;
-    animation: fadeIn 2s forwards 4.5s, glow 2s ease-in-out infinite alternate 4.5s;
+    z-index: 1000;
+    animation: fadeIn 2s forwards 5s, glow 2s ease-in-out infinite alternate 5s;
   }
   @keyframes glow {
     from { text-shadow: 0 0 10px rgba(255,141,203,0.5); }
@@ -252,15 +252,16 @@
   .penguin-row {
     display: flex; align-items: center; gap: 0.5rem;
     opacity: 0;
-    animation: fadeIn 2s forwards 5s;
+    z-index: 1000;
+    animation: fadeIn 2s forwards 5.5s;
   }
   .penguin-gif {
-    max-width: 120px; height: auto;
+    max-width: 140px; height: auto;
     animation: floatPenguin 3s ease-in-out infinite alternate;
   }
   @keyframes floatPenguin {
     0% { transform: translateY(0); }
-    100% { transform: translateY(-10px); }
+    100% { transform: translateY(-15px); }
   }
 
   /* Uçuşan Kalpler ve Yıldız Tozları */
@@ -276,8 +277,9 @@
 
   .sparkle {
     position: fixed; pointer-events: none;
-    width: 5px; height: 5px; border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     animation: sparkleAnim 1.5s ease-out forwards;
+    z-index: 998;
   }
   @keyframes sparkleAnim {
     0%   { opacity: 1; transform: translate(0,0) scale(1); }
@@ -301,20 +303,12 @@
 </div>
 
 <div id="yes-screen">
-  <div class="garden">
-    <div class="stem">
-      <div class="leaf right"></div>
-      <div class="leaf left"></div>
-      <div class="flower-head" id="chrysanthemum-head">
-        <div class="flower-center"></div>
-        </div>
-    </div>
-  </div>
-  
   <div class="yes-text">Seni çok seviyorum! 💖</div>
   <div class="penguin-row">
     <img src="penguen.gif" alt="Kalp Atan Penguen" class="penguin-gif" />
   </div>
+  
+  <div id="garden"></div>
 </div>
 
 <script>
@@ -362,9 +356,8 @@
     }
   }
 
-  // ── Evet Butonu Tıklanma Olayı (Büyüyen CSS Çiçek) ───────────────────────
+  // ── Evet Butonu Tıklanma Olayı ───────────────────────────────────────────
   function sayYes() {
-    // Kalp patlaması efekti
     const emojis = ['💕','💗','💖','💝','🌸','✨','💞'];
     for (let i = 0; i < 35; i++) {
       setTimeout(() => {
@@ -378,60 +371,117 @@
       }, i * 60);
     }
 
-    // Ekranı değiştir
     setTimeout(() => {
       document.getElementById('main-screen').style.display = 'none';
       const ys = document.getElementById('yes-screen');
       ys.style.display = 'flex';
       
-      // Büyülü gece atmosferi
       document.body.style.background = 'radial-gradient(circle at center, #2a0845 0%, #12011a 60%, #000000 100%)';
       
-      buildChrysanthemum(); // Çiçeği oluştur
+      // Tam 23 adet Kasımpatı oluştur!
+      createGardenOf23();
       
-      // Işıltılar saç
-      for(let i=0; i<40; i++) {
-        setTimeout(() => sparkle(), 2000 + (i * 100));
+      // Havada uçuşan partiküller
+      for(let i=0; i<60; i++) {
+        setTimeout(() => sparkle(), 2500 + (Math.random() * 3000));
       }
     }, 800);
   }
 
-  // ── CSS Kasımpatı (Chrysanthemum) Oluşturucu ─────────────────────────────
-  function buildChrysanthemum() {
-    const flowerHead = document.getElementById('chrysanthemum-head');
+  // ── 23 ADET KASIMPATI OLUŞTURMA FONKSİYONU ───────────────────────────────
+  function createGardenOf23() {
+    const garden = document.getElementById('garden');
+    garden.innerHTML = ''; // Temizle
     
-    // Kasımpatı yoğun bir çiçektir, bu yüzden 3 katmanlı çok sayıda yaprak ekliyoruz
+    // Toplam 23 çiçek
+    const totalFlowers = 23;
+    
+    for (let i = 0; i < totalFlowers; i++) {
+      // Çiçeğin Ana Kapsayıcısı
+      let flowerWrapper = document.createElement('div');
+      flowerWrapper.className = 'flower-wrapper';
+      
+      // Rastgele Konum (%5 ile %95 arası ekran genişliği)
+      let leftPos = 5 + Math.random() * 90;
+      
+      // Rastgele Boyut (Arkada kalanlar küçük, öndekiler büyük)
+      let scale = 0.3 + Math.random() * 0.55; // 0.3x ile 0.85x arası büyüklük
+      
+      // Rastgele Gecikme (Her çiçek farklı salisede büyümeye başlasın)
+      let delay = Math.random() * 2.5; // 0 ile 2.5 saniye arası gecikme
+      
+      flowerWrapper.style.left = leftPos + 'vw';
+      flowerWrapper.style.transform = `scale(${scale})`;
+      flowerWrapper.style.zIndex = Math.floor(scale * 100); // Büyükler öne geçsin
+      
+      // SAPI
+      let stem = document.createElement('div');
+      stem.className = 'stem';
+      stem.style.animationDelay = `${0.5 + delay}s`;
+      
+      // YAPRAKLAR (Leaves)
+      let leafR = document.createElement('div');
+      leafR.className = 'leaf right';
+      leafR.style.animationDelay = `${1.2 + delay}s`;
+      
+      let leafL = document.createElement('div');
+      leafL.className = 'leaf left';
+      leafL.style.animationDelay = `${1.5 + delay}s`;
+      
+      // ÇİÇEK BAŞI
+      let head = document.createElement('div');
+      head.className = 'flower-head';
+      
+      // ÇİÇEK GÖBEĞİ
+      let center = document.createElement('div');
+      center.className = 'flower-center';
+      center.style.animationDelay = `${4.5 + delay}s`;
+      head.appendChild(center);
+      
+      // KASIMPATI TAÇ YAPRAKLARINI ÜRET (Fonksiyona gecikmeyi de gönderiyoruz)
+      buildChrysanthemum(head, delay);
+      
+      stem.appendChild(leafR);
+      stem.appendChild(leafL);
+      stem.appendChild(head);
+      flowerWrapper.appendChild(stem);
+      garden.appendChild(flowerWrapper);
+    }
+  }
+
+  function buildChrysanthemum(flowerHead, extraDelay) {
     const layers = [
-      { class: 'layer1', count: 32, delayStart: 2.2 }, // En dış, büyük yapraklar
-      { class: 'layer2', count: 24, delayStart: 2.8 }, // Orta yapraklar
-      { class: 'layer3', count: 16, delayStart: 3.4 }  // En iç, küçük yapraklar
+      { class: 'layer1', count: 32, delayStart: 2.2 }, // En dış
+      { class: 'layer2', count: 24, delayStart: 2.8 }, // Orta
+      { class: 'layer3', count: 16, delayStart: 3.4 }  // İç
     ];
 
     layers.forEach(layer => {
       for (let i = 0; i < layer.count; i++) {
         let petal = document.createElement('div');
         petal.className = `petal ${layer.class}`;
-        // CSS içindeki rotate hesaplaması için değişkenler
         petal.style.setProperty('--i', i);
         petal.style.setProperty('--total', layer.count);
-        // Çiçek açma animasyon gecikmesi (Sap uzadıktan sonra başlar)
-        petal.style.animationDelay = `${layer.delayStart + (i * 0.04)}s`;
+        
+        // Çiçeğin genel gecikmesi + yaprak açma süresi
+        let totalDelay = layer.delayStart + extraDelay + (i * 0.04);
+        petal.style.animationDelay = `${totalDelay}s`;
+        
         flowerHead.appendChild(petal);
       }
     });
   }
 
-  // Uçuşan küçük ışıltılar
   function sparkle() {
     const el = document.createElement('div');
     el.className = 'sparkle';
-    const cx = window.innerWidth  / 2;
-    const cy = window.innerHeight / 2 - 50; // Çiçeğe yakın olması için
+    const cx = Math.random() * window.innerWidth;
+    const cy = Math.random() * (window.innerHeight - 200) + 100; 
     el.style.left = cx + 'px';
     el.style.top  = cy + 'px';
     
-    const tx = (Math.random() - 0.5) * 400;
-    const ty = (Math.random() - 0.5) * 400;
+    const tx = (Math.random() - 0.5) * 300;
+    const ty = (Math.random() - 0.5) * 300;
     el.style.setProperty('--tx', tx + 'px');
     el.style.setProperty('--ty', ty + 'px');
     
