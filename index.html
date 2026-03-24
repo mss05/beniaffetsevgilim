@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beni Affet 🥺</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --pink: #ff4da6;
+    --pink-light: #ff8dcb;
+    --pink-deep: #d6006e;
+    --blush: #ffe4f3;
+    --petal: #ffd6ee;
+    --text-dark: #5a1a3a;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #ffe9f5 0%, #ffd6ee 40%, #ffecf9 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+    transition: background 1.5s ease;
+  }
+
+  /* Subtle background bubbles */
+  .bg-bubble {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.18;
+    animation: drift linear infinite;
+  }
+  @keyframes drift {
+    0% { transform: translateY(110vh) scale(0.8); opacity: 0; }
+    10% { opacity: 0.18; }
+    90% { opacity: 0.18; }
+    100% { transform: translateY(-20vh) scale(1.2); opacity: 0; }
+  }
+
+  /* ---- MAIN SCREEN ---- */
+  #main-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.4rem;
+    padding: 2rem 1.5rem;
+    max-width: 560px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .msg-box {
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #message {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(1.15rem, 4.5vw, 1.75rem);
+    color: var(--pink-deep);
+    text-shadow: 0 2px 14px rgba(214, 0, 110, 0.25);
+    line-height: 1.5;
+    transition: opacity 0.45s ease;
+    max-width: 480px;
+  }
+  #message.hidden { opacity: 0; }
+
+  .banner-wrap {
+    width: 100%;
+    max-width: 320px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 6px 30px rgba(255, 77, 166, 0.3);
+    border: 3px solid rgba(255, 141, 203, 0.5);
+  }
+  .banner-wrap img {
+    width: 100%;
+    display: block;
+  }
+
+  .btn-area {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    min-height: 80px;
+  }
+
+  #yes-btn {
+    background: linear-gradient(135deg, #ff6eba, #ff3fa0);
+    color: #fff;
+    border: none;
+    border-radius: 60px;
+    padding: 14px 36px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 5px 22px rgba(255, 63, 160, 0.45);
+    transition: font-size 0.4s cubic-bezier(.34,1.56,.64,1),
+                padding 0.4s cubic-bezier(.34,1.56,.64,1),
+                transform 0.15s;
+    position: relative;
+    z-index: 10;
+  }
+  #yes-btn:hover { transform: scale(1.06); }
+  #yes-btn:active { transform: scale(0.97); }
+
+  #no-btn {
+    background: #fff;
+    color: #bbb;
+    border: 2px solid #e8d5e2;
+    border-radius: 60px;
+    padding: 11px 26px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: font-size 0.3s, padding 0.3s, opacity 0.3s, left 0.05s, top 0.05s;
+    position: relative;
+    z-index: 10;
+  }
+  #no-btn:hover { background: #fff0f7; color: #999; }
+
+  /* ---- YES SCREEN ---- */
+  #yes-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    animation: fadeInScale 0.8s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  @keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  #flower-canvas {
+    display: block;
+    filter: drop-shadow(0 0 18px rgba(255, 80, 180, 0.7));
+  }
+
+  .yes-text {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(1.4rem, 5vw, 2.2rem);
+    color: #ff8dcb;
+    text-shadow: 0 0 20px rgba(255, 141, 203, 0.7);
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  @keyframes glow {
+    from { text-shadow: 0 0 10px rgba(255,141,203,0.5); }
+    to   { text-shadow: 0 0 28px rgba(255,141,203,1), 0 0 50px rgba(255,80,180,0.4); }
+  }
+
+  .penguin-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 3rem;
+    animation: heartbeat 0.9s ease-in-out infinite;
+  }
+  .heart-icon {
+    font-size: 2.2rem;
+    display: inline-block;
+    animation: heartbeat 0.75s ease-in-out infinite alternate;
+  }
+  @keyframes heartbeat {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  /* Floating hearts */
+  .floater {
+    position: fixed;
+    pointer-events: none;
+    animation: floatUp 2.5s ease-out forwards;
+    font-size: 1.6rem;
+    z-index: 999;
+  }
+  @keyframes floatUp {
+    0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+    100% { opacity: 0; transform: translateY(-220px) rotate(20deg) scale(0.4); }
+  }
+
+  /* Sparkle particles on canvas */
+  .sparkle {
+    position: fixed;
+    pointer-events: none;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #ff8dcb;
+    animation: sparkleAnim 1s ease-out forwards;
+  }
+  @keyframes sparkleAnim {
+    0%   { opacity: 1; transform: translate(0,0) scale(1); }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background bubbles -->
+<script>
+  (function() {
+    const colors = ['#ffb3d9','#ff8dcb','#ffc2e0','#ff69b4','#ffd6ee'];
+    for (let i = 0; i < 12; i++) {
+      const b = document.createElement('div');
+      b.className = 'bg-bubble';
+      const size = 30 + Math.random() * 80;
+      b.style.cssText = `
+        width:${size}px; height:${size}px;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        left:${Math.random()*100}vw;
+        bottom:-${size}px;
+        animation-duration:${8+Math.random()*14}s;
+        animation-delay:${Math.random()*12}s;
+      `;
+      document.body.appendChild(b);
+    }
+  })();
+</script>
+
+<!-- MAIN SCREEN -->
+<div id="main-screen">
+
+  <div class="msg-box">
+    <div id="message">Seni Çok Seviyorum, Beni Affeder Misin? 🥺</div>
+  </div>
+
+  <div class="banner-wrap">
+    <img src="banner.gif" alt="banner" />
+  </div>
+
+  <div class="btn-area" id="btn-area">
+    <button id="yes-btn" onclick="sayYes()">Evet 💕</button>
+    <button id="no-btn" onclick="sayNo()">Hayır</button>
+  </div>
+
+</div>
+
+<!-- YES SCREEN -->
+<div id="yes-screen">
+  <canvas id="flower-canvas" width="460" height="460"></canvas>
+  <div class="yes-text">Seni çok seviyorum! 💖</div>
+  <div class="penguin-row">
+    🐧 <span class="heart-icon">💗</span>
+  </div>
+</div>
+
+<script>
+  // ── Messages ──────────────────────────────────────────────────────────────
+  const rotatingMsgs = [
+    "Seni Çok Seviyorum, Beni Affeder Misin? 🥺",
+    "Çabalayacağız... Beni affet 💝",
+    "Lütfen? Bir şans daha ver 🙏",
+    "Seni kaybetmek istemiyorum 💕",
+    "Affetmeden gidemezsin! 🥺",
+    "Söz veriyorum, daha iyi olacağım 💌",
+    "Hayatımın en güzeli sensin...",
+    "Sana layık biri olmaya çalışıyorum 🐧❤️",
+    "Bir bak şu halime! Beni affet! 😭",
+  ];
+  const pleadMsgs = [
+    "Emin misin? 😢",
+    "Bir daha düşün... 🥺",
+    "Hayır deme bana! 💔",
+    "Lütfen lütfen lütfen! 🙏",
+    "Yok yok hayır yok! 😭",
+    "Evet de gel ya! 💕",
+    "İnatçısın sen de! 😤💕",
+    "Tamam tamam, özür dilerim! 🥺",
+    "Hayır tuşu neden var ki bu sitede!",
+    "Görmüyor musun ne kadar seviyorum seni! 💖",
+  ];
+
+  let msgIndex = 0;
+  let noCount = 0;
+  let cycleInterval;
+  const msgEl = document.getElementById('message');
+  const yesBtn = document.getElementById('yes-btn');
+  const noBtn  = document.getElementById('no-btn');
+  let yesFontSize = 1.25; // rem
+  let yesPaddingV = 14, yesPaddingH = 36;
+
+  function cycleMessage() {
+    msgEl.classList.add('hidden');
+    setTimeout(() => {
+      msgIndex = (msgIndex + 1) % rotatingMsgs.length;
+      msgEl.textContent = rotatingMsgs[msgIndex];
+      msgEl.classList.remove('hidden');
+    }, 450);
+  }
+
+  cycleInterval = setInterval(cycleMessage, 3200);
+
+  // ── No button ─────────────────────────────────────────────────────────────
+  function sayNo() {
+    noCount++;
+
+    // Show pleading message
+    msgEl.classList.add('hidden');
+    setTimeout(() => {
+      msgEl.textContent = pleadMsgs[Math.min(noCount - 1, pleadMsgs.length - 1)];
+      msgEl.classList.remove('hidden');
+    }, 450);
+
+    // Grow yes button
+    yesFontSize = Math.min(yesFontSize + 0.22, 3.8);
+    yesPaddingV = Math.min(yesPaddingV + 5, 50);
+    yesPaddingH = Math.min(yesPaddingH + 10, 100);
+    yesBtn.style.fontSize = yesFontSize + 'rem';
+    yesBtn.style.padding  = `${yesPaddingV}px ${yesPaddingH}px`;
+
+    // Shrink no button
+    const noScale = Math.max(1 - noCount * 0.09, 0.42);
+    noBtn.style.fontSize = noScale + 'rem';
+    noBtn.style.padding  = `${Math.max(11 - noCount * 2, 3)}px ${Math.max(26 - noCount * 4, 8)}px`;
+
+    // Escape after 3 clicks
+    if (noCount >= 3) {
+      noBtn.style.position = 'fixed';
+      noBtn.style.transition = 'font-size 0.3s, padding 0.3s, opacity 0.3s';
+      const margin = 80;
+      noBtn.style.left = (margin + Math.random() * (window.innerWidth  - margin * 2 - 80)) + 'px';
+      noBtn.style.top  = (margin + Math.random() * (window.innerHeight - margin * 2 - 40)) + 'px';
+    }
+  }
+
+  // ── Yes button ────────────────────────────────────────────────────────────
+  function sayYes() {
+    clearInterval(cycleInterval);
+
+    // Burst of floating hearts
+    const emojis = ['💕','💗','💖','💝','🌸','✨','💞'];
+    for (let i = 0; i < 28; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'floater';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        el.style.left = (10 + Math.random() * 80) + 'vw';
+        el.style.top  = (60 + Math.random() * 30) + 'vh';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2600);
+      }, i * 80);
+    }
+
+    setTimeout(() => {
+      document.getElementById('main-screen').style.display = 'none';
+      const ys = document.getElementById('yes-screen');
+      ys.style.display = 'flex';
+      document.body.style.background = 'linear-gradient(160deg, #12011a 0%, #2a0530 55%, #110018 100%)';
+      setTimeout(bloomChrysanthemum, 500);
+    }, 1200);
+  }
+
+  // ── Chrysanthemum ─────────────────────────────────────────────────────────
+  function bloomChrysanthemum() {
+    const canvas = document.getElementById('flower-canvas');
+    const ctx    = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+
+    ctx.clearRect(0, 0, W, H);
+
+    const totalPetals = 36;
+    let drawn = 0;
+
+    function branch(x, y, angle, len, depth, hue, alpha) {
+      if (depth <= 0 || len < 1.2) return;
+      const ex = x + Math.cos(angle) * len;
+      const ey = y + Math.sin(angle) * len;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.shadowBlur  = 12;
+      ctx.shadowColor = `hsl(${hue}, 100%, 72%)`;
+      ctx.strokeStyle = `hsl(${hue}, 88%, ${52 + depth * 4}%)`;
+      ctx.lineWidth   = Math.max(0.4, depth * 0.28);
+      ctx.lineCap     = 'round';
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(ex, ey);
+      ctx.stroke();
+      ctx.restore();
+
+      const spread = 0.22 + (8 - depth) * 0.03;
+      branch(ex, ey, angle - spread, len * 0.70, depth - 1, hue + 6,  alpha * 0.92);
+      branch(ex, ey, angle + spread, len * 0.70, depth - 1, hue - 6,  alpha * 0.92);
+      branch(ex, ey, angle,          len * 0.78, depth - 1, hue,       alpha * 0.95);
+    }
+
+    function drawPetal() {
+      if (drawn >= totalPetals) {
+        // Glowing center
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 22);
+        g.addColorStop(0,   'rgba(255,255,255,1)');
+        g.addColorStop(0.4, 'rgba(255,150,220,0.9)');
+        g.addColorStop(1,   'rgba(255,80,180,0)');
+        ctx.save();
+        ctx.shadowBlur  = 30;
+        ctx.shadowColor = '#fff';
+        ctx.fillStyle   = g;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 22, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // Scatter sparkles
+        for (let s = 0; s < 20; s++) {
+          setTimeout(() => sparkle(), s * 120);
+        }
+        return;
+      }
+
+      const petalAngle = (drawn / totalPetals) * Math.PI * 2 - Math.PI / 2;
+      // Hue: 295 (violet-pink) → 340 (hot pink) → 355 (rose)
+      const hue = 295 + (drawn / totalPetals) * 65;
+
+      branch(cx, cy, petalAngle, 92, 8, hue, 0.95);
+
+      drawn++;
+      setTimeout(drawPetal, 55);
+    }
+
+    drawPetal();
+  }
+
+  function sparkle() {
+    const el = document.createElement('div');
+    el.className = 'sparkle';
+    const cx = window.innerWidth  / 2;
+    const cy = window.innerHeight / 2;
+    el.style.left = cx + 'px';
+    el.style.top  = cy + 'px';
+    const tx = (Math.random() - 0.5) * 260;
+    const ty = (Math.random() - 0.5) * 260;
+    el.style.setProperty('--tx', tx + 'px');
+    el.style.setProperty('--ty', ty + 'px');
+    const colors = ['#ff69b4','#ff8dcb','#ffc0da','#fff','#ff4da6'];
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1100);
+  }
+</script>
+</body>
+</html>
